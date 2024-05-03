@@ -22,6 +22,13 @@ type MongoDBRepo struct {
 	collection *mongo.Collection
 }
 
+// SetupCollection creates a new MongoDB collection
+func SetupCollection(client *mongo.Client, dbName, collectionName string) (*mongo.Collection, error) {
+	database := client.Database(dbName)
+	collection := database.Collection(collectionName)
+	return collection, nil
+}
+
 // Attempts to estabilish a new instance of MongoDBRepo with the provide arguments
 func ConnectMongoDBRepo(connectionString, databaseId, collectionName string) (*MongoDBRepo, error) {
 	opts := options.Client().ApplyURI(connectionString)
@@ -36,8 +43,10 @@ func ConnectMongoDBRepo(connectionString, databaseId, collectionName string) (*M
 		return nil, err
 	}
 
-	db := client.Database(databaseId)
-	collection := db.Collection(collectionName)
+	collection, err := SetupCollection(client, databaseId, collectionName)
+	if err != nil {
+		return nil, err
+	}
 
 	return &MongoDBRepo{
 		collection: collection,
