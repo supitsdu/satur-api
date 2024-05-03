@@ -1,6 +1,6 @@
 
 build:
-	@go build -o ./bin/satur-api ./cmd/accounts
+	@go build -o ./bin/satur-api ./cmd/api
 
 run: build
 	@./bin/satur-api
