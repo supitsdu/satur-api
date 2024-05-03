@@ -11,17 +11,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type AccountHandler struct {
+type HandleAccounts struct {
 	repo repository.Actions
 }
 
-// Creates a new instance of AccountHandler
-func UseAccountHandler(repo repository.Actions) *AccountHandler {
-	return &AccountHandler{repo: repo}
+// Creates a new instance of HandleAccounts
+func CreateHandleAccounts(repo repository.Actions) *HandleAccounts {
+	return &HandleAccounts{repo: repo}
 }
 
-// GetAccountHandler handles GET requests for account information
-func (h *AccountHandler) GetMethod(w http.ResponseWriter, r *http.Request) {
+// GetMethod handles GET requests for accounts information
+func (h *HandleAccounts) GetMethod(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	username := vars["username"]
 
@@ -39,7 +39,7 @@ func (h *AccountHandler) GetMethod(w http.ResponseWriter, r *http.Request) {
 }
 
 // PostMethod handles POST requests to create a new account
-func (h *AccountHandler) PostMethod(w http.ResponseWriter, r *http.Request) {
+func (h *HandleAccounts) PostMethod(w http.ResponseWriter, r *http.Request) {
 	var account model.AccountPersonalData
 	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
 		response.WriteError(w, http.StatusBadRequest, "Invalid request body")
@@ -54,8 +54,8 @@ func (h *AccountHandler) PostMethod(w http.ResponseWriter, r *http.Request) {
 	response.WriteJSON(w, http.StatusCreated, "Finished action successfully")
 }
 
-// DeleteAccountHandler handles DELETE requests to delete an account
-func (h *AccountHandler) DeleteMethod(w http.ResponseWriter, r *http.Request) {
+// DeleteMethod handles DELETE requests to delete an account
+func (h *HandleAccounts) DeleteMethod(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	username := vars["username"]
 
